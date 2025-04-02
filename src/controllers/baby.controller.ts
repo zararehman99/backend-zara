@@ -8,9 +8,14 @@ interface AuthenticatedRequest extends Request {
 // Babies Controller
 export const getBabies = async (req: Request, res: Response) => {
   try {
-    const babies = await Baby.findAll({ where: { userId: req.params.userId } });
+    const babies = await Baby.findAll({ where: { userId: req.params.userId }, include: [
+      { model: PumpSession, as: 'pumpSessions' },
+      { model: HealthLog, as: 'healthLogs' },
+      { model: Feed, as: 'feeds' },
+    ] });
     res.json(babies);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
   }
 };
@@ -37,7 +42,16 @@ export const createBaby = async (req: Request, res: Response) => {
 
 export const getBaby = async (req: Request, res: Response) => {
   try {
-    const baby = await Baby.findByPk(req.params.id);
+    const baby = await Baby.findAll({
+      where: {
+        userId: req.params.id, // Match the userId with the passed ID in params
+      },
+      include: [
+        { model: Feed, as: "feeds" }, // Include feeds associated with the baby
+        { model: PumpSession, as: "pumpSessions" }, // Include pump sessions
+        { model: HealthLog, as: "healthLogs" }, // Include health logs
+      ],
+    });
     res.json(baby);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
@@ -76,7 +90,12 @@ export const updateBaby = async (req: Request, res: Response) => {
 // Feeds Controller
 export const getFeeds = async (req: Request, res: Response) => {
   try {
-    const feeds = await Feed.findAll({ where: { babyId: req.params.babyId } });
+    const feeds = await Feed.findAll({ where: { babyId: req.params.babyId }, include: [
+      { model: Baby, as: 'baby' },
+      { model: PumpSession, as: 'pumpSession' },
+      { model: HealthLog, as: 'healthLog' },
+      { model: Feed, as: 'feed' },
+    ] });
     res.json(feeds);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
@@ -85,7 +104,13 @@ export const getFeeds = async (req: Request, res: Response) => {
 
 export const createFeed = async (req: Request, res: Response) => {
   try {
-    const feed = await Feed.create({ ...req.body, babyId: req.params.babyId });
+    const feed = await Feed.create({
+      babyId: req.params.babyId,
+      feedType: req.body.feedType,
+      feedTime: new Date(),
+      durationMins: parseInt(req.body.duration, 10),
+      quantityMl: parseInt(req.body.amount, 10)
+    });
     res.status(201).json(feed);
   } catch (error) {
     res.status(400).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });

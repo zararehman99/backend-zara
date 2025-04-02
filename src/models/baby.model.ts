@@ -247,16 +247,16 @@ HealthLog.init(
   }
 );
 
-Baby.hasMany(Feed, { foreignKey: "babyId", onDelete: "CASCADE" });
-Feed.belongsTo(Baby, { foreignKey: "babyId" });
+Baby.hasMany(Feed, { foreignKey: "babyId", as: "feeds", onDelete: "CASCADE" });
+Feed.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
-Baby.hasMany(PumpSession, { foreignKey: "babyId", onDelete: "CASCADE" });
-PumpSession.belongsTo(Baby, { foreignKey: "babyId" });
+Baby.hasMany(PumpSession, { foreignKey: "babyId", as:"pumpSessions", onDelete: "CASCADE" });
+PumpSession.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
-Baby.hasMany(HealthLog, { foreignKey: "babyId", onDelete: "CASCADE" });
-HealthLog.belongsTo(Baby, { foreignKey: "babyId" });
+Baby.hasMany(HealthLog, { foreignKey: "babyId", as: "healthLogs", onDelete: "CASCADE" });
+HealthLog.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
-User.hasMany(Baby, { foreignKey: "userId", onDelete: "CASCADE" });
-Baby.belongsTo(User, { foreignKey: "userId" });
+User.hasMany(Baby, { foreignKey: "userId", as: "babies", onDelete: "CASCADE" });
+Baby.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 export { Baby, Feed, PumpSession, HealthLog };
