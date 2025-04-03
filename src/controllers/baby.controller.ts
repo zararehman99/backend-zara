@@ -206,7 +206,12 @@ export const getHealthLogs = async (req: Request, res: Response) => {
 
 export const createHealthLog = async (req: Request, res: Response) => {
   try {
-    const log = await HealthLog.create({ ...req.body, babyId: req.params.babyId });
+    const log = await HealthLog.create({
+      babyId: req.params.babyId,
+      diaperChanges: parseInt(req.body.diaperChanges, 10),
+      temperature: parseFloat(req.body.temperature),
+      notes: req.body.notes
+     });
     res.status(201).json(log);
   } catch (error) {
     res.status(400).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
