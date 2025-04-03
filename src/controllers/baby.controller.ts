@@ -158,7 +158,12 @@ export const getPumpSessions = async (req: Request, res: Response) => {
 
 export const createPumpSession = async (req: Request, res: Response) => {
   try {
-    const session = await PumpSession.create({ ...req.body, babyId: req.params.babyId });
+    const session = await PumpSession.create({ 
+      babyId: req.params.babyId,
+      sessionDuration: parseInt(req.body.sessionDuration, 10),
+      sessionVolume: parseInt(req.body.sessionVolume, 10),
+      notes: req.body.notes
+     });
     res.status(201).json(session);
   } catch (error) {
     res.status(400).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
