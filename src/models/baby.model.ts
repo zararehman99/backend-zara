@@ -145,10 +145,8 @@ Feed.init(
 class PumpSession extends Model {
   declare id: number;
   declare babyId: number;
-  declare sessionTime: Date;
-  declare durationMins: number;
-  declare volumeMl: number;
-  declare side?: string;
+  declare sessionDuration: number;
+  declare sessionVolume: number;
   declare notes?: string;
 }
 
@@ -169,20 +167,12 @@ PumpSession.init(
       },
       onDelete: "CASCADE",
     },
-    sessionTime: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    durationMins: {
+    sessionDuration: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
-    volumeMl: {
+    sessionVolume: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    side: {
-      type: DataTypes.STRING,
       allowNull: true,
     },
     notes: {
