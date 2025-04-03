@@ -250,8 +250,7 @@ HealthLog.init(
 class SleepLog extends Model {
   declare id: number;
   declare babyId: number;
-  declare sleepStartTime: Date;
-  declare sleepEndTime: Date;
+  declare sleepQuality: string;
   declare durationMins: number;
   declare notes?: string;
 }

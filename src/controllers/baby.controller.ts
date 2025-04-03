@@ -251,7 +251,7 @@ export const createSleepLog = async (req: Request, res: Response) => {
   try {
     const log = await SleepLog.create({
       babyId: req.params.babyId,
-      durationMins: parseInt(req.body.duration, 10),
+      durationMins: parseInt(req.body.sleepDuration, 10),
       sleepQuality: req.body.sleepQuality,
       notes: req.body.notes
      });
