@@ -247,6 +247,52 @@ HealthLog.init(
   }
 );
 
+class SleepLog extends Model {
+  declare id: number;
+  declare babyId: number;
+  declare sleepStartTime: Date;
+  declare sleepEndTime: Date;
+  declare durationMins: number;
+  declare notes?: string;
+}
+
+SleepLog.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      unique: true,
+    },
+    babyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Baby,
+        key: "id",
+      },
+      onDelete: "CASCADE",
+    },
+    durationMins: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    sleepQuality: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    notes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+  },
+  {
+    sequelize,
+    tableName: "sleep_logs",
+    timestamps: true,
+  }
+);
+
 Baby.hasMany(Feed, { foreignKey: "babyId", as: "feeds", onDelete: "CASCADE" });
 Feed.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
@@ -255,6 +301,9 @@ PumpSession.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
 Baby.hasMany(HealthLog, { foreignKey: "babyId", as: "healthLogs", onDelete: "CASCADE" });
 HealthLog.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
+
+Baby.hasMany(SleepLog, { foreignKey: "babyId", as: "sleepLogs", onDelete: "CASCADE" });
+SleepLog.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
 User.hasMany(Baby, { foreignKey: "userId", as: "babies", onDelete: "CASCADE" });
 Baby.belongsTo(User, { foreignKey: "userId", as: "user" });
