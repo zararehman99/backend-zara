@@ -308,4 +308,4 @@ SleepLog.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 User.hasMany(Baby, { foreignKey: "userId", as: "babies", onDelete: "CASCADE" });
 Baby.belongsTo(User, { foreignKey: "userId", as: "user" });
 
-export { Baby, Feed, PumpSession, HealthLog };
+export { Baby, Feed, PumpSession, HealthLog, SleepLog };

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Baby, Feed, PumpSession, HealthLog } from "../models/baby.model";
+import { Baby, Feed, PumpSession, HealthLog, SleepLog } from "../models/baby.model";
 
 interface AuthenticatedRequest extends Request {
     user?: { id: number }; // Modify based on your authentication logic
@@ -242,6 +242,58 @@ export const deleteHealthLog = async (req: any, res: Response) => {
     } else {
       res.status(404).json({ message: "Health log not found" });
     }
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
+  }
+};
+
+export const createSleepLog = async (req: Request, res: Response) => {
+  try {
+    const log = await SleepLog.create({
+      babyId: req.params.babyId,
+      durationMins: parseInt(req.body.duration, 10),
+      sleepQuality: req.body.sleepQuality,
+      notes: req.body.notes
+     });
+    res.status(201).json(log);
+  } catch (error) {
+    res.status(400).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
+  }
+};
+
+export const updateSleepLog = async (req: any, res: Response) => {
+  try {
+    const { babyId, sleepLogId, ...data } = req.body;
+    const [updated] = await SleepLog.update(data, { where: { babyId, sleepLogId } });
+    if (updated) {
+        const updatedSleepLog = await SleepLog.findByPk(sleepLogId);
+        res.status(200).json(updatedSleepLog);
+    } else {
+        res.status(404).json({ message: "Sleep log not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
+  }
+};
+
+export const deleteSleepLog = async (req: any, res: Response) => {
+  try {
+    const { babyId, sleepLogId } = req.params;
+    const deleted = await SleepLog.destroy({ where: { babyId, sleepLogId } });
+    if (deleted) {
+      res.status(200).json({ message: "Sleep log deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Sleep log not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
+  }
+};
+
+export const getSleepLogs = async (req: Request, res: Response) => {
+  try {
+    const logs = await SleepLog.findAll({ where: { babyId: req.params.babyId } });
+    res.json(logs);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : "An unknown error occurred" });
   }

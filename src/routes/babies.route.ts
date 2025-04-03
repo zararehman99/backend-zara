@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBaby, createFeed, createHealthLog, createPumpSession, deleteBaby, deleteFeed, deleteHealthLog, deletePumpSession, getBabies, getBaby, getFeeds, getHealthLogs, getPumpSessions, updateBaby, updateFeed, updateHealthLog, updatePumpSession } from '../controllers/baby.controller';
+import { createBaby, createFeed, createHealthLog, createPumpSession, deleteBaby, deleteFeed, deleteHealthLog, deletePumpSession, getBabies, getBaby, getFeeds, getHealthLogs, getPumpSessions, updateBaby, updateFeed, updateHealthLog, updatePumpSession, createSleepLog, updateSleepLog, deleteSleepLog, getSleepLogs } from '../controllers/baby.controller';
 
 const router = express.Router();
 
@@ -20,6 +20,11 @@ router.post("/:babyId/health-log", createHealthLog)
 router.get("/:babyId/health-log", getHealthLogs)
 router.put("/:babyId/health-log/:healthLogId", updateHealthLog)
 router.delete("/:babyId/health-log/:healthLogId", deleteHealthLog)
+router.post("/:babyId/sleep-log", createSleepLog)
+router.put("/:babyId/sleep-log/:sleepLogId", updateSleepLog)
+router.delete("/:babyId/sleep-log/:sleepLogId", deleteSleepLog)
+router.get("/:babyId/sleep-log", getSleepLogs)
+
 
 
 export const babiesRouter = router;
