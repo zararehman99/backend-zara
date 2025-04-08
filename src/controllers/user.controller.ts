@@ -123,7 +123,7 @@ export const createInventory = async (
     const inventory = await Inventory.create({
       userId: userId,
       item: name,
-      quantity: quantity,
+      quantity: parseInt(quantity, 10),
       category: category,
     })
     res.status(201).json(inventory);
