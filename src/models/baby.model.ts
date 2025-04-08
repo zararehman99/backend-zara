@@ -50,22 +50,22 @@ Baby.init(
       },
     },
     weight: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Baby weight is required",
-          },
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Baby weight is required",
         },
+      },
     },
     height: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Baby height is required",
-          },
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Baby height is required",
         },
+      },
     },
     imageBase: {
       type: DataTypes.STRING,
@@ -282,19 +282,94 @@ SleepLog.init(
   }
 );
 
+class Inventory extends Model {
+  declare id: number;
+  declare item: string;
+  declare quantity: number;
+  declare category: string;
+}
+
+Inventory.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      unique: true,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+      onDelete: "CASCADE",
+    },
+    item: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Item is required",
+        },
+      },
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Quantity is required",
+        },
+      },
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Category is required",
+        },
+      },
+    },
+  },
+  {
+    sequelize,
+    tableName: "inventory",
+    timestamps: true,
+  }
+);
+
 Baby.hasMany(Feed, { foreignKey: "babyId", as: "feeds", onDelete: "CASCADE" });
 Feed.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
-Baby.hasMany(PumpSession, { foreignKey: "babyId", as:"pumpSessions", onDelete: "CASCADE" });
+Baby.hasMany(PumpSession, {
+  foreignKey: "babyId",
+  as: "pumpSessions",
+  onDelete: "CASCADE",
+});
 PumpSession.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
-Baby.hasMany(HealthLog, { foreignKey: "babyId", as: "healthLogs", onDelete: "CASCADE" });
+Baby.hasMany(HealthLog, {
+  foreignKey: "babyId",
+  as: "healthLogs",
+  onDelete: "CASCADE",
+});
 HealthLog.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
-Baby.hasMany(SleepLog, { foreignKey: "babyId", as: "sleepLogs", onDelete: "CASCADE" });
+Baby.hasMany(SleepLog, {
+  foreignKey: "babyId",
+  as: "sleepLogs",
+  onDelete: "CASCADE",
+});
 SleepLog.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
 User.hasMany(Baby, { foreignKey: "userId", as: "babies", onDelete: "CASCADE" });
 Baby.belongsTo(User, { foreignKey: "userId", as: "user" });
 
-export { Baby, Feed, PumpSession, HealthLog, SleepLog };
+User.hasMany(Inventory, { foreignKey: "userId", as: "inventory", onDelete: "CASCADE" });
+Inventory.belongsTo(User, { foreignKey: "userId", as: "user"})
+
+export { Baby, Feed, PumpSession, HealthLog, SleepLog, Inventory };
+ 
