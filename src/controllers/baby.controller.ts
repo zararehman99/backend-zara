@@ -214,7 +214,7 @@ export const createHealthLog = async (req: Request, res: Response) => {
   try {
     const log = await HealthLog.create({
       babyId: req.params.babyId,
-      diaperChanges: parseInt(req.body.diaperChanges, 10),
+      diaperChanges: parseInt(req.body.diaperChange, 10),
       temperature: parseFloat(req.body.temperature),
       notes: req.body.notes
      });
