@@ -12,6 +12,7 @@ export const getBabies = async (req: Request, res: Response) => {
       { model: PumpSession, as: 'pumpSessions' },
       { model: HealthLog, as: 'healthLogs' },
       { model: Feed, as: 'feeds' },
+      { model: SleepLog, as: 'sleepLogs' },
     ] });
     res.json(babies);
   } catch (error) {
