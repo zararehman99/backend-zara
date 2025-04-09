@@ -114,21 +114,58 @@ export const editUserThreadId = async (
 };
 
 export const createInventory = async (
-  req: Request ,
+  req: Request,
   res: Response,
 ) => {
   try {
     const { name, quantity, category } = req.body;
     const userId = req.params.userId;
-    const inventory = await Inventory.create({
-      userId: userId,
-      item: name,
-      quantity: parseInt(quantity, 10),
-      category: category,
-    })
-    res.status(201).json(inventory);
+
+    // Validation
+    if (!name || !category || isNaN(parseInt(quantity))) {
+      res.status(400).json({ message: "Missing or invalid fields." });
+    } else {
+      const parsedQuantity = parseInt(quantity, 10);
+
+      // Check if item with same name and category exists for this user
+      const existingItem = await Inventory.findOne({
+        where: {
+          userId,
+          item: name,
+          category,
+        },
+      });
+
+      if (existingItem) {
+        // Update quantity
+        existingItem.quantity += parsedQuantity;
+        await existingItem.save();
+
+        res.status(200).json({
+          message: "Item already exists. Quantity updated.",
+          item: existingItem,
+        });
+      } else {
+        // Create new inventory item
+        const inventory = await Inventory.create({
+          userId,
+          item: name,
+          quantity: parsedQuantity,
+          category,
+        });
+
+        res.status(201).json({
+          message: "New inventory item created.",
+          item: inventory,
+        });
+      }
+    }
   } catch (error) {
-    res.status(400).json({ error: error instanceof Error ? error.message : " An error occurred while createing the inventory." });
+    res.status(400).json({
+      error: error instanceof Error
+        ? error.message
+        : "An error occurred while creating the inventory."
+    });
   }
 }
 
