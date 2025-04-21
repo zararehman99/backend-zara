@@ -110,7 +110,7 @@ export const createFeed = async (req: Request, res: Response) => {
       feedType: req.body.feedType,
       feedTime: new Date(),
       durationMins: parseInt(req.body.duration, 10),
-      quantityMl: parseInt(req.body.amount, 10)
+      quantityMl: req.body.amount ? parseInt(req.body.amount, 10) : null
     });
     res.status(201).json(feed);
   } catch (error) {
