@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:8081", "https://front-end-flax-zeta.vercel.app"],
+  origin: ["http://localhost:5173", "http://localhost:8081", "https://front-end-flax-zeta.vercel.app", "https://la-latch-club.vercel.app"],
   credentials: true,
 };
 
