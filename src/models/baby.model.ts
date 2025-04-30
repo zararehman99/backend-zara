@@ -371,5 +371,10 @@ Baby.belongsTo(User, { foreignKey: "userId", as: "user" });
 User.hasMany(Inventory, { foreignKey: "userId", as: "inventory", onDelete: "CASCADE" });
 Inventory.belongsTo(User, { foreignKey: "userId", as: "user"})
 
-export { Baby, Feed, PumpSession, HealthLog, SleepLog, Inventory };
+Baby.hasMany(TushLog, { foreignKey: 'babyId', as: 'tushLogs' })
+TushLog.belongsTo(Baby, { foreignKey: 'babyId', as: 'baby' })
+
+
+export { Baby, Feed, PumpSession, HealthLog, SleepLog, Inventory, TushLog };
+
  
