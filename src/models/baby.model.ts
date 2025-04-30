@@ -341,6 +341,62 @@ Inventory.init(
   }
 );
 
+class TushLog extends Model {
+  declare id: number
+  declare babyId: number
+  declare eventType: string
+  declare stoolFrequency?: string
+  declare stoolConsistency?: string
+  declare diaperCondition?: string
+  declare abnormalities?: string
+  declare additionalNotes?: string
+}
+
+TushLog.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      unique: true,
+    },
+    babyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    eventType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    stoolFrequency: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    stoolConsistency: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    diaperCondition: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    abnormalities: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    additionalNotes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+  },
+  {
+    sequelize,
+    tableName: "tush_logs",
+    modelName: "TushLog",
+    timestamps: true,
+  }
+)
+
 Baby.hasMany(Feed, { foreignKey: "babyId", as: "feeds", onDelete: "CASCADE" });
 Feed.belongsTo(Baby, { foreignKey: "babyId", as: "baby" });
 
@@ -371,7 +427,11 @@ Baby.belongsTo(User, { foreignKey: "userId", as: "user" });
 User.hasMany(Inventory, { foreignKey: "userId", as: "inventory", onDelete: "CASCADE" });
 Inventory.belongsTo(User, { foreignKey: "userId", as: "user"})
 
-Baby.hasMany(TushLog, { foreignKey: 'babyId', as: 'tushLogs' })
+Baby.hasMany(TushLog, {
+  foreignKey: "babyId",
+  as: "tushLogs",
+  onDelete: "CASCADE",
+});
 TushLog.belongsTo(Baby, { foreignKey: 'babyId', as: 'baby' })
 
 
