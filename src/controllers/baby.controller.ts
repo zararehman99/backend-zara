@@ -13,6 +13,7 @@ export const getBabies = async (req: Request, res: Response) => {
       { model: HealthLog, as: 'healthLogs' },
       { model: Feed, as: 'feeds' },
       { model: SleepLog, as: 'sleepLogs' },
+      { model: TushLog, as: 'tushLogs' },
     ] });
     res.json(babies);
   } catch (error) {
