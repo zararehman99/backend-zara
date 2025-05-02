@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { userRouter } from "./routes/user.route";
 import { authRouter } from "./routes/auth.route";
 import { babiesRouter } from "./routes/babies.route";
+import { langgraphRouter } from "./routes/langgraph.route";
 import livekitRoutes from "./routes/livekit.route";
 
 dotenv.config();
@@ -27,5 +28,6 @@ app.use("/api/users", userRouter);
 app.use("/api/babies", babiesRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/livekit", livekitRoutes);
+app.use("/api/langgraph", langgraphRouter);
 
 export default app;
